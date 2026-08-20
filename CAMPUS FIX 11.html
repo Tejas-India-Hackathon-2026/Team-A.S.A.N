@@ -1473,6 +1473,25 @@
             switchTab('report');
         }
 
+        function downloadTicketAttachment(ticketId, attachmentType) {
+            const ticket = tickets.find(item => item.id === ticketId);
+            if (!ticket) return;
+
+            const imageData = attachmentType === 'handwritten' ? ticket.handwrittenImage : ticket.problemImage;
+            if (!imageData) {
+                showToast('This attachment is not available.', 'error');
+                return;
+            }
+
+            const link = document.createElement('a');
+            link.href = imageData;
+            link.download = `${ticketId}-${attachmentType === 'handwritten' ? 'application' : 'problem-photo'}.png`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            showToast('Attachment download started.', 'success');
+        }
+
         function renderUserTickets() {
             const container = document.getElementById('tickets-list-container');
             document.getElementById('user-ticket-count').innerText = tickets.length;
@@ -1509,6 +1528,10 @@
                         </div>
                         <p class="text-[11px] text-slate-500"><i class="fa-solid fa-user mr-1"></i>${ticket.reporterName || 'Reporter not provided'} <span class="mx-1">•</span> Roll: ${ticket.reporterRollNumber || 'N/A'} <span class="mx-1">•</span> Mobile: ${ticket.reporterMobileNumber || 'N/A'}</p>
                         <p class="text-sm text-slate-800 font-medium">${ticket.description}</p>
+                        <div class="flex flex-wrap gap-2 pt-2">
+                            ${ticket.handwrittenImage ? `<button onclick="downloadTicketAttachment('${ticket.id}', 'handwritten')" class="bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg px-3 py-1.5 text-[11px] font-bold flex items-center gap-1"><i class="fa-solid fa-download"></i> Download Application</button>` : ''}
+                            ${ticket.problemImage ? `<button onclick="downloadTicketAttachment('${ticket.id}', 'problem')" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg px-3 py-1.5 text-[11px] font-bold flex items-center gap-1"><i class="fa-solid fa-download"></i> Download Problem Photo</button>` : ''}
+                        </div>
                     </div>
 
                     <!-- Visual Stepper Progress Bar -->
