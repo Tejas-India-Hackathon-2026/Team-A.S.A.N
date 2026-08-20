@@ -98,6 +98,32 @@
             background: rgba(255, 255, 255, 0.22) !important;
             color: #ffffff !important;
         }
+        .menu-button {
+            width: 2.5rem;
+            height: 2.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(191, 219, 254, 0.38);
+            border-radius: 0.75rem;
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+        }
+        .menu-button:hover {
+            background: rgba(255, 255, 255, 0.24);
+        }
+        .side-menu {
+            background: rgba(15, 23, 42, 0.88);
+            -webkit-backdrop-filter: blur(22px) saturate(140%);
+            backdrop-filter: blur(22px) saturate(140%);
+            border-right: 1px solid rgba(191, 219, 254, 0.28);
+            box-shadow: 18px 0 45px rgba(2, 24, 74, 0.28);
+        }
+        .profile-strip {
+            background: rgba(239, 246, 255, 0.72);
+            border-bottom: 1px solid rgba(147, 197, 253, 0.72);
+            box-shadow: 0 8px 24px rgba(30, 64, 175, 0.12);
+        }
         .report-hero {
             background: linear-gradient(135deg, rgba(239, 246, 255, 0.92), rgba(219, 234, 254, 0.72) 52%, rgba(224, 242, 254, 0.86));
             color: #0f172a;
@@ -167,6 +193,9 @@
     <nav class="upper-ribbon text-white border-b sticky top-0 z-40 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
+                <button onclick="toggleSideMenu()" class="menu-button" aria-label="Open menu" title="Open menu">
+                    <i class="fa-solid fa-bars text-lg" aria-hidden="true"></i>
+                </button>
                 <!-- Logo -->
                 <div class="flex items-center space-x-3 cursor-pointer" onclick="goToHomepage()" onkeydown="if (event.key === 'Enter' || event.key === ' ') goToHomepage()" role="link" tabindex="0" aria-label="Go to CampusFix homepage">
                     <div class="campus-logo w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30 text-white" aria-label="CampusFix logo" title="CampusFix">
@@ -212,6 +241,80 @@
             </div>
         </div>
     </nav>
+
+    <!-- LEFT USER MENU -->
+    <div id="side-menu-backdrop" class="fixed inset-0 bg-slate-950/35 z-40 hidden" onclick="closeSideMenu()"></div>
+    <aside id="side-menu" class="side-menu fixed top-0 left-0 bottom-0 w-80 max-w-[88vw] z-50 p-6 transform -translate-x-full transition-transform duration-300" aria-label="User menu">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <p class="text-[10px] uppercase tracking-[0.22em] text-blue-200 font-bold">CampusFix</p>
+                <h2 class="text-xl font-bold text-white">Quick Menu</h2>
+            </div>
+            <button onclick="closeSideMenu()" class="text-blue-100 hover:text-white p-2" title="Close menu" aria-label="Close menu">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+        <div class="flex items-center gap-3 border-b border-white/15 pb-5 mb-5">
+            <div class="w-11 h-11 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold" id="menu-avatar">AR</div>
+            <div>
+                <p class="font-bold text-white" id="menu-user-name">Ashwin Raj</p>
+                <p class="text-xs text-blue-100" id="menu-user-role">Student</p>
+            </div>
+        </div>
+        <nav class="space-y-2">
+            <button onclick="openCreateUser()" class="w-full text-left text-blue-50 hover:text-white hover:bg-white/15 px-4 py-3 rounded-xl flex items-center gap-3">
+                <i class="fa-solid fa-user-plus w-5 text-blue-200"></i><span>Create New User ID</span>
+            </button>
+            <button onclick="openAdminLogin()" class="w-full text-left text-blue-50 hover:text-white hover:bg-white/15 px-4 py-3 rounded-xl flex items-center gap-3">
+                <i class="fa-solid fa-shield-halved w-5 text-amber-300"></i><span>Admin Login</span>
+            </button>
+            <button onclick="toggleProfilePanel(); closeSideMenu()" class="w-full text-left text-blue-50 hover:text-white hover:bg-white/15 px-4 py-3 rounded-xl flex items-center gap-3">
+                <i class="fa-solid fa-user-pen w-5 text-emerald-300"></i><span>View &amp; Edit Profile</span>
+            </button>
+        </nav>
+    </aside>
+
+    <!-- PROFILE OPTION BELOW RIBBON -->
+    <section class="profile-strip px-4 sm:px-6 lg:px-8 py-3">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold" id="profile-strip-avatar">AR</div>
+                <div>
+                    <p class="text-xs font-bold text-slate-900" id="profile-strip-name">Ashwin Raj</p>
+                    <p class="text-[10px] text-slate-600" id="profile-strip-summary">Student profile</p>
+                </div>
+            </div>
+            <button onclick="toggleProfilePanel()" class="bg-white/70 hover:bg-white text-blue-800 border border-blue-200 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-2">
+                <i class="fa-solid fa-user-pen"></i><span id="profile-toggle-label">View &amp; Edit Profile</span>
+            </button>
+        </div>
+        <div id="profile-panel" class="max-w-7xl mx-auto mt-3 glass-panel rounded-2xl p-5 hidden">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Your Profile</h2>
+                    <p class="text-xs text-slate-500">Review and update your account details.</p>
+                </div>
+                <button onclick="toggleProfilePanel()" class="text-slate-500 hover:text-slate-900 p-2" title="Close profile"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <input id="profile-name" type="text" placeholder="Name" class="px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                <input id="profile-roll-number" type="text" placeholder="Roll Number" class="px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                <input id="profile-registration-number" type="text" placeholder="Registration Number" class="px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                <input id="profile-email" type="email" placeholder="Email Address" class="px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                <input id="profile-phone" type="tel" placeholder="Mobile Number" class="px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                <select id="profile-hostel" class="px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">Select Hostel</option>
+                    <option value="ARYABHATTA BHAWAN">ARYABHATTA BHAWAN</option>
+                    <option value="C.V RAMAN BHAWAN">C.V RAMAN BHAWAN</option>
+                    <option value="VAISHALI BHAWAN">VAISHALI BHAWAN</option>
+                </select>
+            </div>
+            <div class="flex justify-end gap-2 mt-4">
+                <button onclick="toggleProfilePanel()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-xs font-bold">Cancel</button>
+                <button onclick="saveProfile()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold"><i class="fa-solid fa-floppy-disk mr-1"></i>Save Profile</button>
+            </div>
+        </div>
+    </section>
 
     <!-- Mobile Navigation Bottom Bar -->
     <div class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 flex justify-around py-2 z-40 text-slate-400 text-xs">
@@ -911,6 +1014,75 @@
             switchTab('report');
         }
 
+        function toggleSideMenu() {
+            document.getElementById('side-menu').classList.toggle('-translate-x-full');
+            document.getElementById('side-menu-backdrop').classList.toggle('hidden');
+        }
+
+        function closeSideMenu() {
+            document.getElementById('side-menu').classList.add('-translate-x-full');
+            document.getElementById('side-menu-backdrop').classList.add('hidden');
+        }
+
+        function openCreateUser() {
+            closeSideMenu();
+            openAuthModal();
+            toggleAuthMode('signup');
+        }
+
+        function openAdminLogin() {
+            closeSideMenu();
+            openAuthModal();
+            toggleAuthMode('login');
+            document.getElementById('login-email').value = 'admin@campus.edu';
+            showToast('Admin login selected. Use OTP or password to continue.', 'success');
+        }
+
+        function toggleProfilePanel() {
+            const panel = document.getElementById('profile-panel');
+            const isOpening = panel.classList.contains('hidden');
+            if (isOpening) {
+                populateProfileForm();
+                document.getElementById('profile-toggle-label').innerText = 'Close Profile';
+                panel.classList.remove('hidden');
+            } else {
+                document.getElementById('profile-toggle-label').innerText = 'View & Edit Profile';
+                panel.classList.add('hidden');
+            }
+        }
+
+        function populateProfileForm() {
+            document.getElementById('profile-name').value = currentUser.name || '';
+            document.getElementById('profile-roll-number').value = currentUser.rollNumber || '';
+            document.getElementById('profile-registration-number').value = currentUser.registrationNumber || '';
+            document.getElementById('profile-email').value = currentUser.email || '';
+            document.getElementById('profile-phone').value = currentUser.phone || currentUser.reporterMobileNumber || '';
+            document.getElementById('profile-hostel').value = currentUser.hostel || '';
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('profile-name').value.trim();
+            const email = document.getElementById('profile-email').value.trim();
+            if (!name) {
+                showToast('Name is required.', 'error');
+                return;
+            }
+            if (email && !email.includes('@')) {
+                showToast('Please enter a valid email address.', 'error');
+                return;
+            }
+            currentUser.name = name;
+            currentUser.initials = name.substring(0, 2).toUpperCase();
+            currentUser.rollNumber = document.getElementById('profile-roll-number').value.trim();
+            currentUser.registrationNumber = document.getElementById('profile-registration-number').value.trim();
+            currentUser.email = email || 'user@campus.edu';
+            currentUser.phone = document.getElementById('profile-phone').value.trim();
+            currentUser.hostel = document.getElementById('profile-hostel').value;
+            updateUserUI();
+            toggleProfilePanel();
+            showToast('Profile updated successfully.', 'success');
+        }
+
         // Image Preview Handler
         function previewImage(input, previewId, dropzoneId) {
             if (input.files && input.files[0]) {
@@ -1486,6 +1658,12 @@
             document.getElementById('user-display-name').innerText = currentUser.name;
             document.getElementById('user-avatar-initials').innerText = currentUser.initials;
             document.getElementById('user-role-badge').innerText = currentUser.role;
+            document.getElementById('menu-user-name').innerText = currentUser.name;
+            document.getElementById('menu-user-role').innerText = currentUser.role;
+            document.getElementById('menu-avatar').innerText = currentUser.initials;
+            document.getElementById('profile-strip-name').innerText = currentUser.name;
+            document.getElementById('profile-strip-summary').innerText = `${currentUser.role} profile${currentUser.hostel ? ` • ${currentUser.hostel}` : ''}`;
+            document.getElementById('profile-strip-avatar').innerText = currentUser.initials;
         }
 
         function handleForgotPassword() {
@@ -1525,6 +1703,7 @@
             if (event.key === 'Escape') {
                 closeAuthModal();
                 closeAttachmentModal();
+                closeSideMenu();
             }
         });
     </script>
