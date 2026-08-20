@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusFix - Report. Track. Resolve.</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#0f172a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+
+    <!-- Top Navbar -->
+    <nav class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-40 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('report')">
+                    <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-black text-xl shadow-lg shadow-blue-500/30 text-white">
+                        CF
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-white via-slate-200 to-blue-400 bg-clip-text text-transparent">CampusFix</span>
+                        <p class="text-[10px] text-blue-400 font-semibold tracking-widest uppercase -mt-1">Report • Track • Resolve</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <div id="nav-links" class="hidden md:flex items-center space-x-1 font-medium text-sm">
+                    <button onclick="switchTab('report')" id="nav-report" class="px-4 py-2 rounded-lg transition-all flex items-center space-x-2 bg-blue-600 text-white shadow">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>Report Issue</span>
+                    </button>
+                    <button onclick="switchTab('tickets')" id="nav-tickets" class="px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-all flex items-center space-x-2">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>My Reports (<span id="user-ticket-count">0</span>)</span>
+                    </button>
+                    <button onclick="switchTab('admin')" id="nav-admin" class="px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-all flex items-center space-x-2">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>Admin Panel</span>
+                    </button>
+                    <button onclick="switchTab('team')" id="nav-team" class="px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-all flex items-center space-x-2">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Team</span>
+                    </button>
+                </div>
+
+                <!-- User Profile / Auth Toggle Button -->
+                <div class="flex items-center space-x-3">
+                    <div id="user-badge" class="hidden sm:flex items-center space-x-2 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700">
+                        <div class="w-6 h-6 rounded-full bg-blue-500 text-white text-xs font-bold flex items-center justify-center" id="user-avatar-initials">U</div>
+                        <span class="text-xs font-medium text-slate-200" id="user-display-name">Guest User</span>
+                        <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full font-semibold" id="user-role-badge">Student</span>
+                    </div>
+                    <button onclick="openAuthModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-700 transition">
+                        <i class="fa-solid fa-right-to-bracket mr-1"></i> Account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Bottom Bar -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 flex justify-around py-2 z-40 text-slate-400 text-xs">
+        <button onclick="switchTab('report')" class="flex flex-col items-center p-1 text-blue-400">
+            <i class="fa-solid fa-bolt text-lg"></i>
+            <span>Report</span>
+        </button>
+        <button onclick="switchTab('tickets')" class="flex flex-col items-center p-1 hover:text-white">
+            <i class="fa-solid fa-list-check text-lg"></i>
+            <span>Track</span>
+        </button>
+        <button onclick="switchTab('admin')" class="flex flex-col items-center p-1 hover:text-white">
+            <i class="fa-solid fa-shield-halved text-lg"></i>
+            <span>Admin</span>
+        </button>
+        <button onclick="switchTab('team')" class="flex flex-col items-center p-1 hover:text-white">
+            <i class="fa-solid fa-users text-lg"></i>
+            <span>Team</span>
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow pb-20 md:pb-8 w-full">
+
+        <!-- SECTION 1: REPORT COMPLAINT VIEW -->
+        <section id="view-report" class="max-w-3xl mx-auto space-y-6">
+            <!-- Header Banner -->
+            <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden border border-slate-800">
+                <div class="relative z-10">
+                    <div class="inline-flex items-center space-x-2 bg-blue-500/20 text-blue-300 border border-blue-500/30 px-3 py-1 rounded-full text-xs font-semibold mb-3">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>AI-Powered Routing Active</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Report a Campus Problem</h1>
+                    <p class="text-slate-300 text-sm mt-1 max-w-xl">
+                        Snap a photo, describe the issue, and our Gemini AI will analyze and route it to the right department instantly.
+                    </p>
+                </div>
+                <i class="fa-solid fa-screwdriver-wrench absolute -right-6 -bottom-6 text-9xl text-white/5 transform -rotate-12"></i>
+            </div>
+
+            <!-- Form Card -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-6">
+                <form id="reportForm" onsubmit="handleAnalyzeReport(event)">
+                    
+                    <!-- 1. Handwritten Application (Required Hybrid Approach) -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                                Handwritten Application <span class="text-red-500">*</span>
+                            </label>
+                            <span class="text-[10px] bg-red-100 text-red-700 font-bold px-2 py-0.5 rounded-full uppercase">Required</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Attach a photo of your signed, handwritten complaint form before continuing.</p>
+                        
+                        <div id="handwritten-dropzone" onclick="document.getElementById('handwritten-input').click()" 
+                             class="border-2 border-dashed border-slate-300 rounded-xl p-5 text-center bg-slate-50 hover:bg-slate-100/80 transition cursor-pointer relative group">
+                            <input type="file" id="handwritten-input" accept="image/*" class="hidden" onchange="previewImage(this, 'handwritten-preview', 'handwritten-dropzone')">
+                            
+                            <div id="handwritten-placeholder" class="space-y-2">
+                                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto text-blue-600 group-hover:scale-110 transition">
+                                    <i class="fa-solid fa-file-pen text-xl"></i>
+                                </div>
+                                <p class="text-xs font-semibold text-slate-700">Tap to upload your handwritten application</p>
+                                <p class="text-[10px] text-slate-400">Supports JPG, PNG up to 5MB</p>
+                            </div>
+
+                            <div id="handwritten-preview" class="hidden relative">
+                                <img src="" alt="Handwritten Application" class="max-h-48 mx-auto rounded-lg shadow-md object-contain">
+                                <span class="absolute top-2 right-2 bg-slate-900/80 text-white text-xs px-2 py-1 rounded-md shadow">
+                                    <i class="fa-solid fa-check text-green-400 mr-1"></i> Attached
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Visual Proof / Photo of Problem (Optional) -->
+                    <div class="space-y-2 pt-2">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                            Photo of the Problem <span class="text-slate-400 font-normal">(Optional)</span>
+                        </label>
+                        <div id="problem-dropzone" onclick="document.getElementById('problem-input').click()" 
+                             class="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center bg-slate-50 hover:bg-slate-100/80 transition cursor-pointer relative group">
+                            <input type="file" id="problem-input" accept="image/*" class="hidden" onchange="previewImage(this, 'problem-preview', 'problem-dropzone')">
+                            
+                            <div id="problem-placeholder" class="space-y-1">
+                                <i class="fa-solid fa-camera text-slate-400 text-xl group-hover:text-blue-500 transition"></i>
+                                <p class="text-xs font-medium text-slate-600">Tap to add visual proof of the issue</p>
+                            </div>
+
+                            <div id="problem-preview" class="hidden relative">
+                                <img src="" alt="Problem Visual" class="max-h-40 mx-auto rounded-lg shadow-md object-contain">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. What of the Problem (Description) -->
+                    <div class="space-y-2 pt-2">
+                        <label for="problem-description" class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                            What of the Problem <span class="text-red-500">*</span>
+                        </label>
+                        <textarea id="problem-description" rows="3" required
+                            placeholder="e.g. Sir with due respect I'm trying to make aware you about that in room no G17 there is a issue in the light bulb tube which is flickering and not turning on."
+                            class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm transition text-slate-800 placeholder-slate-400 bg-slate-50/50"></textarea>
+                    </div>
+
+                    <!-- 4. Location Details -->
+                    <div class="space-y-2 pt-2">
+                        <label for="problem-location" class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                            Location Details <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </span>
+                            <input type="text" id="problem-location" required
+                                placeholder="e.g. Hostel Block A, Room G17"
+                                class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm transition text-slate-800 bg-slate-50/50">
+                        </div>
+                    </div>
+
+                    <!-- Analyze with AI Button -->
+                    <div class="pt-4">
+                        <button type="submit" id="analyze-btn" class="w-full bg-slate-900 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg hover:shadow-blue-500/25 transition duration-200 flex items-center justify-center space-x-2 text-sm tracking-wide">
+                            <i class="fa-solid fa-wand-magic-sparkles text-blue-400"></i>
+                            <span>Analyze with AI</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION 2: AI CLASSIFICATION & CONFIRMATION SCREEN -->
+        <section id="view-ai-review" class="max-w-2xl mx-auto space-y-6 hidden">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl border border-slate-200 space-y-6">
+                <!-- AI Banner -->
+                <div class="flex items-center space-x-4 border-b border-slate-100 pb-5">
+                    <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 text-2xl flex-shrink-0">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">The Brain: AI-Powered Analysis</h2>
+                        <p class="text-xs text-slate-500">Here is how CampusFix classified your report before final submission.</p>
+                    </div>
+                </div>
+
+                <!-- AI Output Cards -->
+                <div class="space-y-4">
+                    <!-- Ticket Pending Status -->
+                    <div class="flex justify-between items-center bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5">
+                        <span class="text-xs font-bold text-amber-800 uppercase tracking-wider">
+                            <i class="fa-solid fa-clock mr-1"></i> Ticket Pending Submission
+                        </span>
+                        <span class="text-xs font-semibold text-amber-700" id="ai-live-badge">Ready for Submission</span>
+                    </div>
+
+                    <!-- Classified Department -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 flex items-start justify-between">
+                        <div>
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Target Department</p>
+                            <p class="text-base font-bold text-slate-900 mt-0.5" id="ai-department">Electrical Maintenance</p>
+                        </div>
+                        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-lg text-xs font-bold flex items-center space-x-1">
+                            <i class="fa-solid fa-bolt"></i>
+                            <span id="ai-category-tag">Electrical</span>
+                        </span>
+                    </div>
+
+                    <!-- Priority & Location -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Priority Routing</p>
+                            <span id="ai-priority-badge" class="inline-block mt-1 px-3 py-1 rounded-md text-xs font-extrabold uppercase bg-orange-100 text-orange-800">
+                                MEDIUM
+                            </span>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Location</p>
+                            <p class="text-sm font-bold text-slate-800 mt-1" id="ai-location">G17</p>
+                        </div>
+                    </div>
+
+                    <!-- Executive Summary -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-1">
+                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">AI Executive Summary</p>
+                        <p class="text-xs text-slate-700 leading-relaxed italic" id="ai-summary">
+                            "Sir with due respect I'm trying to make aware you about that in room no G17 there is a issue in the light bulb..."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                    <button onclick="submitFinalComplaint()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 text-sm">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Submit Complaint Now</span>
+                    </button>
+                    <button onclick="editReport()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-5 rounded-xl transition text-sm flex items-center justify-center space-x-1">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>Edit Report</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: SUBMISSION CONFIRMATION -->
+        <section id="view-success" class="max-w-lg mx-auto space-y-6 hidden text-center">
+            <div class="bg-white rounded-2xl p-8 shadow-xl border border-slate-200 space-y-6">
+                <!-- Check Icon -->
+                <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-3xl shadow-inner">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-900">Complaint Submitted Successfully!</h2>
+                    <p class="text-xs text-slate-500 mt-1">Complaint is successfully raised and routed.</p>
+                </div>
+
+                <!-- Ticket Card -->
+                <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 text-left space-y-3">
+                    <div>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Ticket ID</span>
+                        <div class="flex items-center justify-between mt-0.5">
+                            <span class="font-mono font-bold text-base text-slate-900" id="conf-ticket-id">CYRAMANG1718082026</span>
+                            <button onclick="copyTicketId()" class="text-slate-400 hover:text-blue-600 p-1" title="Copy Ticket ID">
+                                <i class="fa-regular fa-copy text-base"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-slate-200">
+                        <div>
+                            <span class="text-slate-400 font-medium">Status:</span>
+                            <p class="font-bold text-blue-600 uppercase" id="conf-status">SUBMITTED</p>
+                        </div>
+                        <div>
+                            <span class="text-slate-400 font-medium">Priority:</span>
+                            <p class="font-bold text-amber-600 uppercase" id="conf-priority">MEDIUM</p>
+                        </div>
+                        <div class="col-span-2">
+                            <span class="text-slate-400 font-medium">Location:</span>
+                            <p class="font-bold text-slate-800" id="conf-location">G17</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-2 space-y-2">
+                    <button onclick="switchTab('tickets')" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl text-sm transition">
+                        View & Track My Tickets
+                    </button>
+                    <button onclick="switchTab('report')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs transition">
+                        Report Another Issue
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: MY TICKETS & REAL-TIME TRACKING -->
+        <section id="view-tickets" class="space-y-6 hidden">
+            <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900">Track Complaints</h1>
+                    <p class="text-xs text-slate-500">Monitor real-time updates and resolutions on your campus reports.</p>
+                </div>
+                <button onclick="switchTab('report')" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition self-start sm:self-auto flex items-center space-x-1">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>New Complaint</span>
+                </button>
+            </div>
+
+            <!-- Ticket List Container -->
+            <div id="tickets-list-container" class="space-y-4">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- SECTION 5: ADMIN DASHBOARD -->
+        <section id="view-admin" class="space-y-6 hidden">
+            <!-- Header -->
+            <div class="bg-slate-900 text-white p-6 rounded-2xl flex flex-col md:flex-row justify-between md:items-center gap-4">
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="bg-red-500/20 text-red-300 text-[10px] font-bold px-2 py-0.5 rounded uppercase border border-red-500/30">Admin Panel</span>
+                        <h1 class="text-xl font-bold">Campus Operations Control</h1>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">Review incoming issues, update resolution status, and manage department dispatches.</p>
+                </div>
+                
+                <!-- Quick Stats -->
+                <div class="flex items-center space-x-3 text-center">
+                    <div class="bg-slate-800 px-3 py-2 rounded-xl border border-slate-700">
+                        <p class="text-[10px] text-slate-400 uppercase font-semibold">Total Issues</p>
+                        <p class="text-lg font-bold text-white" id="stat-total">0</p>
+                    </div>
+                    <div class="bg-slate-800 px-3 py-2 rounded-xl border border-slate-700">
+                        <p class="text-[10px] text-amber-400 uppercase font-semibold">Pending</p>
+                        <p class="text-lg font-bold text-amber-400" id="stat-pending">0</p>
+                    </div>
+                    <div class="bg-slate-800 px-3 py-2 rounded-xl border border-slate-700">
+                        <p class="text-[10px] text-emerald-400 uppercase font-semibold">Resolved</p>
+                        <p class="text-lg font-bold text-emerald-400" id="stat-resolved">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Controls -->
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200">
+                <div class="flex items-center space-x-2 text-xs">
+                    <span class="font-bold text-slate-500 uppercase">Filter Status:</span>
+                    <select id="admin-filter-status" onchange="renderAdminTickets()" class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs font-medium outline-none">
+                        <option value="ALL">All Statuses</option>
+                        <option value="SUBMITTED">Submitted</option>
+                        <option value="CHECKED IN">Checked In</option>
+                        <option value="IN PROGRESS">In Progress</option>
+                        <option value="RESOLVED">Resolved</option>
+                    </select>
+                </div>
+                <div class="text-xs text-slate-400 font-medium">
+                    Showing real-time database state
+                </div>
+            </div>
+
+            <!-- Admin Tickets Table/List -->
+            <div id="admin-tickets-container" class="space-y-4">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- SECTION 6: TEAM SHOWCASE -->
+        <section id="view-team" class="max-w-4xl mx-auto space-y-8 hidden">
+            <div class="text-center space-y-2">
+                <span class="text-xs font-bold text-blue-600 bg-blue-100 px-3 py-1 rounded-full uppercase tracking-wider">Meet the Developers</span>
+                <h1 class="text-3xl font-extrabold text-slate-900">The Visionaries Behind CampusFix</h1>
+                <p class="text-sm text-slate-500 max-w-xl mx-auto">Bridging AI & ML academic expertise directly into Smart Routing & AI Analysis for real-world campus solutions.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Neha Kumari -->
+                <div class="bg-white rounded-2xl p-6 text-center border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-20 h-20 bg-gradient-to-tr from-pink-500 to-rose-400 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                        NK
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-base">Neha Kumari</h3>
+                    <p class="text-xs font-bold text-blue-600 mt-0.5">CSE (AI & ML) 2026</p>
+                    <p class="text-[11px] text-slate-500 mt-2">AI Workflow & Pattern Classification Specialist.</p>
+                </div>
+
+                <!-- Ashwin Raj -->
+                <div class="bg-white rounded-2xl p-6 text-center border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-20 h-20 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                        AR
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-base">Ashwin Raj</h3>
+                    <p class="text-xs font-bold text-blue-600 mt-0.5">CSE (AI & ML) 2026</p>
+                    <p class="text-[11px] text-slate-500 mt-2">Full Stack Architecture & Database Integration.</p>
+                </div>
+
+                <!-- Asad Iqbal -->
+                <div class="bg-white rounded-2xl p-6 text-center border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-20 h-20 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                        AI
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-base">Asad Iqbal</h3>
+                    <p class="text-xs font-bold text-blue-600 mt-0.5">CSE (AI & ML) 2026</p>
+                    <p class="text-[11px] text-slate-500 mt-2">Smart Campus UI/UX & Interactive Logic.</p>
+                </div>
+
+                <!-- Sunny Raj -->
+                <div class="bg-white rounded-2xl p-6 text-center border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-20 h-20 bg-gradient-to-tr from-amber-500 to-orange-400 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                        SR
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-base">Sunny Raj</h3>
+                    <p class="text-xs font-bold text-blue-600 mt-0.5">CSE (AI & ML) 2026</p>
+                    <p class="text-[11px] text-slate-500 mt-2">Operations, Routing Logic & System Security.</p>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 text-slate-300 p-6 rounded-2xl text-center space-y-2 border border-slate-800">
+                <p class="text-sm font-semibold text-white">"Together, we report. Together, we resolve. Together, we build a better campus."</p>
+                <p class="text-xs text-slate-400">CampusFix Engineering Team • 2026</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- AUTHENTICATION MODAL -->
+    <div id="auth-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <!-- Close Button -->
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Modal Header -->
+            <div class="text-center space-y-1 mb-6">
+                <h3 class="text-xl font-bold text-slate-900" id="auth-title">Welcome Back!</h3>
+                <p class="text-xs text-slate-500" id="auth-subtitle">Login to continue to CampusFix</p>
+            </div>
+
+            <!-- Login Form -->
+            <div id="form-login" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Email Address</label>
+                    <input type="email" id="login-email" placeholder="student@campus.edu" value="student@campus.edu"
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Password</label>
+                        <a href="#" class="text-[11px] text-blue-600 hover:underline">Forgot Password?</a>
+                    </div>
+                    <input type="password" id="login-password" value="password123"
+                        class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <button onclick="handleLogin()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl text-sm transition">
+                    Login
+                </button>
+
+                <!-- SSO Divider -->
+                <div class="relative my-4">
+                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div>
+                    <div class="relative flex justify-center text-[10px] uppercase"><span class="bg-white px-2 text-slate-400 font-semibold">or continue with</span></div>
+                </div>
+
+                <!-- SSO Buttons -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="simulateSSO('Google')" class="flex items-center justify-center space-x-2 border border-slate-300 hover:bg-slate-50 py-2 rounded-xl text-xs font-semibold text-slate-700">
+                        <i class="fa-brands fa-google text-red-500"></i>
+                        <span>Google</span>
+                    </button>
+                    <button onclick="simulateSSO('Microsoft')" class="flex items-center justify-center space-x-2 border border-slate-300 hover:bg-slate-50 py-2 rounded-xl text-xs font-semibold text-slate-700">
+                        <i class="fa-brands fa-microsoft text-blue-500"></i>
+                        <span>Microsoft</span>
+                    </button>
+                </div>
+
+                <div class="pt-2 text-center text-xs text-slate-500">
+                    Don't have an account? <a href="javascript:void(0)" onclick="toggleAuthMode('signup')" class="text-blue-600 font-bold hover:underline">Sign Up</a>
+                </div>
+            </div>
+
+            <!-- Sign Up Form (Matching PDF specification) -->
+            <div id="form-signup" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Full Name</label>
+                    <input type="text" id="signup-name" placeholder="John Doe" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Email Address</label>
+                    <input type="email" id="signup-email" placeholder="name@campus.edu" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Select Role</label>
+                        <select id="signup-role" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium outline-none">
+                            <option value="Student">Student</option>
+                            <option value="Staff">Staff</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Hostel Name <span class="text-[10px] text-slate-400 font-normal">(Opt)</span></label>
+                        <select id="signup-hostel" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium outline-none">
+                            <option value="">Select Hostel</option>
+                            <option value="Block A">Hostel Block A</option>
+                            <option value="Block B">Hostel Block B</option>
+                            <option value="Block C">Hostel Block C</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Gender & Smart Rule -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Gender</label>
+                    <select id="signup-gender" onchange="handleGenderRule()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium outline-none">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                    <p id="gender-smart-note" class="text-[10px] text-blue-600 font-semibold mt-1 hidden">
+                        <i class="fa-solid fa-circle-info mr-0.5"></i> Smart Rule: If Female selected, Phone No. entry is optional.
+                    </p>
+                </div>
+
+                <div id="phone-container">
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Phone Number <span id="phone-required-tag" class="text-slate-400 font-normal">(Optional)</span></label>
+                    <input type="tel" id="signup-phone" placeholder="+91 9876543210" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password</label>
+                        <input type="password" placeholder="••••••••" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Confirm Password</label>
+                        <input type="password" placeholder="••••••••" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm outline-none">
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2 text-xs text-slate-600">
+                    <input type="checkbox" id="terms-check" checked class="rounded text-blue-600">
+                    <label for="terms-check">I agree to the Terms & Conditions and Privacy Policy</label>
+                </div>
+
+                <button onclick="handleSignUp()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm transition">
+                    Sign Up
+                </button>
+
+                <div class="pt-2 text-center text-xs text-slate-500">
+                    Already have an account? <a href="javascript:void(0)" onclick="toggleAuthMode('login')" class="text-blue-600 font-bold hover:underline">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM NOTIFICATION TOAST -->
+    <div id="toast" class="fixed bottom-20 md:bottom-6 right-6 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-3 z-50 transform translate-y-24 opacity-0 transition-all duration-300 border border-slate-800">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <span id="toast-message" class="text-xs font-semibold">Notification message</span>
+    </div>
+
+    <script>
+        // --- Application State ---
+        let currentUser = {
+            name: "John Student",
+            email: "student@campus.edu",
+            role: "Student",
+            initials: "JS"
+        };
+
+        // In-Memory Storage for Demo
+        let tickets = [
+            {
+                id: "CYRAMANG1718082026",
+                category: "Electrical Maintenance",
+                summary: "Sir with due respect I'm trying to make aware you about that in room no G17 there is a issue in the light bulb tube flickering continuously.",
+                description: "Sir with due respect I'm trying to make aware you about that in room no G17 there is a issue in the light bulb tube...",
+                location: "Hostel Block A, Room G17",
+                priority: "MEDIUM",
+                status: "CHECKED IN", // SUBMITTED -> CHECKED IN -> IN PROGRESS -> RESOLVED
+                createdAt: "2026-08-20 10:15 AM",
+                hasHandwritten: true,
+                hasPhoto: true
+            },
+            {
+                id: "CYRAMANG1718082027",
+                category: "Plumbing Department",
+                summary: "Leaking faucet in washroom Block B 2nd floor causing water overflow.",
+                description: "The sink tap is broken and continuous water leakage is occurring in second floor washroom.",
+                location: "Block B, 2nd Floor Washroom",
+                priority: "HIGH",
+                status: "SUBMITTED",
+                createdAt: "2026-08-20 11:30 AM",
+                hasHandwritten: true,
+                hasPhoto: false
+            }
+        ];
+
+        let currentPendingReport = null;
+
+        // Initialize App on Load
+        window.onload = function() {
+            updateUserUI();
+            renderUserTickets();
+            renderAdminTickets();
+        };
+
+        // Tab Navigation Switcher
+        function switchTab(tab) {
+            const tabs = ['report', 'tickets', 'admin', 'team', 'ai-review', 'success'];
+            tabs.forEach(t => {
+                const el = document.getElementById(`view-${t}`);
+                if (el) el.classList.add('hidden');
+                
+                const navBtn = document.getElementById(`nav-${t}`);
+                if (navBtn) {
+                    navBtn.className = "px-4 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition-all flex items-center space-x-2";
+                }
+            });
+
+            const activeView = document.getElementById(`view-${tab}`);
+            if (activeView) activeView.classList.remove('hidden');
+
+            const activeNav = document.getElementById(`nav-${tab}`);
+            if (activeNav) {
+                activeNav.className = "px-4 py-2 rounded-lg transition-all flex items-center space-x-2 bg-blue-600 text-white shadow";
+            }
+
+            if (tab === 'tickets') renderUserTickets();
+            if (tab === 'admin') renderAdminTickets();
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Image Preview Handler
+        function previewImage(input, previewId, dropzoneId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById(previewId);
+                    const placeholder = document.getElementById(dropzoneId).querySelector('div[id$="-placeholder"]');
+                    
+                    preview.querySelector('img').src = e.target.result;
+                    preview.classList.remove('hidden');
+                    if (placeholder) placeholder.classList.add('hidden');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Handle "Analyze with AI"
+        async function handleAnalyzeReport(e) {
+            e.preventDefault();
+
+            const handwrittenInput = document.getElementById('handwritten-input');
+            const desc = document.getElementById('problem-description').value.trim();
+            const loc = document.getElementById('problem-location').value.trim();
+
+            if (!handwrittenInput.files.length) {
+                showToast("Please upload the mandatory handwritten application image.", "error");
+                return;
+            }
+
+            const btn = document.getElementById('analyze-btn');
+            const originalBtnHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Analyzing with Gemini AI...</span>`;
+
+            try {
+                // Call Gemini API for smart classification
+                const aiResult = await callGeminiAnalysis(desc, loc);
+
+                currentPendingReport = {
+                    id: "CYRAMANG" + Math.floor(1000000000 + Math.random() * 9000000000),
+                    category: aiResult.department || "General Maintenance",
+                    summary: aiResult.summary || desc,
+                    description: desc,
+                    location: loc,
+                    priority: aiResult.priority || "MEDIUM",
+                    status: "SUBMITTED",
+                    createdAt: new Date().toLocaleString([], { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
+                    hasHandwritten: true,
+                    hasPhoto: !!document.getElementById('problem-input').files.length
+                };
+
+                // Populate AI Review Screen
+                document.getElementById('ai-department').innerText = currentPendingReport.category;
+                document.getElementById('ai-category-tag').innerText = currentPendingReport.category.split(' ')[0];
+                document.getElementById('ai-priority-badge').innerText = currentPendingReport.priority;
+                document.getElementById('ai-location').innerText = currentPendingReport.location;
+                document.getElementById('ai-summary').innerText = `"${currentPendingReport.summary}"`;
+
+                // Set badge styling by priority
+                const pBadge = document.getElementById('ai-priority-badge');
+                if (currentPendingReport.priority === 'HIGH' || currentPendingReport.priority === 'URGENT') {
+                    pBadge.className = "inline-block mt-1 px-3 py-1 rounded-md text-xs font-extrabold uppercase bg-red-100 text-red-800";
+                } else if (currentPendingReport.priority === 'MEDIUM') {
+                    pBadge.className = "inline-block mt-1 px-3 py-1 rounded-md text-xs font-extrabold uppercase bg-amber-100 text-amber-800";
+                } else {
+                    pBadge.className = "inline-block mt-1 px-3 py-1 rounded-md text-xs font-extrabold uppercase bg-emerald-100 text-emerald-800";
+                }
+
+                switchTab('ai-review');
+                showToast("AI Analysis completed successfully!", "success");
+
+            } catch (err) {
+                console.error("Gemini API Error:", err);
+                // Fallback analysis if network fails
+                fallbackAnalysis(desc, loc);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalBtnHtml;
+            }
+        }
+
+        // Live Gemini API Call using gemini-3-flash-preview
+        async function callGeminiAnalysis(description, location) {
+            const apiKey = ""; // API key passed via runtime
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const systemPrompt = "You are CampusFix AI. Classify campus complaints into department, priority (LOW, MEDIUM, HIGH, URGENT), and a 1-sentence concise executive summary.";
+
+            const payload = {
+                contents: [{
+                    parts: [{ text: `Analyze this complaint: "${description}" at location: "${location}". Return pure JSON with keys: department, priority, summary.` }]
+                }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            department: { type: "STRING" },
+                            priority: { type: "STRING" },
+                            summary: { type: "STRING" }
+                        },
+                        required: ["department", "priority", "summary"]
+                    }
+                }
+            };
+
+            const res = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!res.ok) throw new Error("Gemini API Request failed");
+            const data = await res.json();
+            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            return JSON.parse(text);
+        }
+
+        function fallbackAnalysis(desc, loc) {
+            let dept = "General Maintenance";
+            let prio = "MEDIUM";
+            const lower = desc.toLowerCase();
+
+            if (lower.includes('bulb') || lower.includes('light') || lower.includes('fan') || lower.includes('wire') || lower.includes('electricity')) {
+                dept = "Electrical Maintenance";
+            } else if (lower.includes('leak') || lower.includes('pipe') || lower.includes('water') || lower.includes('tap') || lower.includes('washroom')) {
+                dept = "Plumbing Department";
+            } else if (lower.includes('door') || lower.includes('desk') || lower.includes('chair') || lower.includes('window')) {
+                dept = "Carpentry & Furniture";
+            } else if (lower.includes('wifi') || lower.includes('router') || lower.includes('internet') || lower.includes('lan')) {
+                dept = "IT Infrastructure";
+            }
+
+            if (lower.includes('urgent') || lower.includes('danger') || lower.includes('spark') || lower.includes('overflow')) {
+                prio = "HIGH";
+            }
+
+            currentPendingReport = {
+                id: "CYRAMANG" + Math.floor(1000000000 + Math.random() * 9000000000),
+                category: dept,
+                summary: desc.length > 90 ? desc.substring(0, 90) + "..." : desc,
+                description: desc,
+                location: loc,
+                priority: prio,
+                status: "SUBMITTED",
+                createdAt: new Date().toLocaleString([], { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
+                hasHandwritten: true,
+                hasPhoto: false
+            };
+
+            document.getElementById('ai-department').innerText = currentPendingReport.category;
+            document.getElementById('ai-category-tag').innerText = currentPendingReport.category.split(' ')[0];
+            document.getElementById('ai-priority-badge').innerText = currentPendingReport.priority;
+            document.getElementById('ai-location').innerText = currentPendingReport.location;
+            document.getElementById('ai-summary').innerText = `"${currentPendingReport.summary}"`;
+
+            switchTab('ai-review');
+        }
+
+        function submitFinalComplaint() {
+            if (!currentPendingReport) return;
+            tickets.unshift(currentPendingReport);
+
+            // Update Success View
+            document.getElementById('conf-ticket-id').innerText = currentPendingReport.id;
+            document.getElementById('conf-status').innerText = currentPendingReport.status;
+            document.getElementById('conf-priority').innerText = currentPendingReport.priority;
+            document.getElementById('conf-location').innerText = currentPendingReport.location;
+
+            // Reset Form
+            document.getElementById('reportForm').reset();
+            document.getElementById('handwritten-preview').classList.add('hidden');
+            document.getElementById('handwritten-placeholder').classList.remove('hidden');
+            document.getElementById('problem-preview').classList.add('hidden');
+            document.getElementById('problem-placeholder').classList.remove('hidden');
+
+            switchTab('success');
+            showToast("Complaint submitted successfully!", "success");
+            currentPendingReport = null;
+        }
+
+        function editReport() {
+            switchTab('report');
+        }
+
+        function renderUserTickets() {
+            const container = document.getElementById('tickets-list-container');
+            document.getElementById('user-ticket-count').innerText = tickets.length;
+
+            if (tickets.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white p-8 rounded-2xl text-center border border-slate-200">
+                        <i class="fa-solid fa-inbox text-4xl text-slate-300 mb-2"></i>
+                        <p class="text-sm font-semibold text-slate-600">No issues reported yet.</p>
+                        <button onclick="switchTab('report')" class="mt-3 text-xs text-blue-600 font-bold hover:underline">Raise a Complaint</button>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = tickets.map(ticket => `
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition space-y-4">
+                    <!-- Top Line -->
+                    <div class="flex flex-wrap justify-between items-center gap-2 pb-3 border-b border-slate-100">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-mono text-xs font-bold text-slate-900 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200">
+                                ${ticket.id}
+                            </span>
+                            <span class="text-xs font-semibold text-slate-500">${ticket.createdAt}</span>
+                        </div>
+                        ${getStatusBadge(ticket.status)}
+                    </div>
+
+                    <!-- Details -->
+                    <div class="space-y-1">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs font-bold text-blue-600 uppercase tracking-wide">${ticket.category}</span>
+                            <span class="text-slate-300">•</span>
+                            <span class="text-xs text-slate-600 font-medium"><i class="fa-solid fa-location-dot mr-1 text-slate-400"></i>${ticket.location}</span>
+                        </div>
+                        <p class="text-sm text-slate-800 font-medium">${ticket.description}</p>
+                    </div>
+
+                    <!-- Visual Stepper Progress Bar -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-2">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Real-Time Tracking Progress</p>
+                        <div class="grid grid-cols-4 gap-1 text-center">
+                            <div class="space-y-1">
+                                <div class="h-1.5 rounded-full ${['SUBMITTED','CHECKED IN','IN PROGRESS','RESOLVED'].includes(ticket.status) ? 'bg-blue-600' : 'bg-slate-200'}"></div>
+                                <span class="text-[9px] font-bold ${ticket.status === 'SUBMITTED' ? 'text-blue-600' : 'text-slate-400'}">Submitted</span>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="h-1.5 rounded-full ${['CHECKED IN','IN PROGRESS','RESOLVED'].includes(ticket.status) ? 'bg-blue-600' : 'bg-slate-200'}"></div>
+                                <span class="text-[9px] font-bold ${ticket.status === 'CHECKED IN' ? 'text-blue-600' : 'text-slate-400'}">Checked In</span>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="h-1.5 rounded-full ${['IN PROGRESS','RESOLVED'].includes(ticket.status) ? 'bg-blue-600' : 'bg-slate-200'}"></div>
+                                <span class="text-[9px] font-bold ${ticket.status === 'IN PROGRESS' ? 'text-blue-600' : 'text-slate-400'}">In Progress</span>
+                            </div>
+                            <div class="space-y-1">
+                                <div class="h-1.5 rounded-full ${ticket.status === 'RESOLVED' ? 'bg-emerald-500' : 'bg-slate-200'}"></div>
+                                <span class="text-[9px] font-bold ${ticket.status === 'RESOLVED' ? 'text-emerald-600' : 'text-slate-400'}">Resolved</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAdminTickets() {
+            const container = document.getElementById('admin-tickets-container');
+            const filter = document.getElementById('admin-filter-status').value;
+
+            const filtered = filter === 'ALL' ? tickets : tickets.filter(t => t.status === filter);
+
+            // Stats update
+            document.getElementById('stat-total').innerText = tickets.length;
+            document.getElementById('stat-pending').innerText = tickets.filter(t => t.status !== 'RESOLVED').length;
+            document.getElementById('stat-resolved').innerText = tickets.filter(t => t.status === 'RESOLVED').length;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="bg-white p-6 rounded-xl text-center text-slate-500 text-xs">No records found for filter "${filter}".</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(t => `
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div class="space-y-2 flex-1">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-mono text-xs font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded border">${t.id}</span>
+                            <span class="text-xs font-bold text-blue-600">${t.category}</span>
+                            <span class="text-slate-300">•</span>
+                            <span class="text-xs text-slate-500 font-medium">${t.location}</span>
+                        </div>
+                        <p class="text-xs text-slate-800 font-medium">${t.description}</p>
+                        <div class="flex items-center space-x-2 text-[10px] text-slate-400">
+                            <span>Logged: ${t.createdAt}</span>
+                            <span>• Priority: <strong class="text-slate-700">${t.priority}</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Admin Status Action Controls -->
+                    <div class="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase">Change Status:</label>
+                        <select onchange="updateTicketStatus('${t.id}', this.value)" class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs font-bold outline-none text-slate-800">
+                            <option value="SUBMITTED" ${t.status === 'SUBMITTED' ? 'selected' : ''}>1. SUBMITTED</option>
+                            <option value="CHECKED IN" ${t.status === 'CHECKED IN' ? 'selected' : ''}>2. CHECKED IN</option>
+                            <option value="IN PROGRESS" ${t.status === 'IN PROGRESS' ? 'selected' : ''}>3. IN PROGRESS</option>
+                            <option value="RESOLVED" ${t.status === 'RESOLVED' ? 'selected' : ''}>4. RESOLVED</option>
+                        </select>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateTicketStatus(id, newStatus) {
+            const ticket = tickets.find(t => t.id === id);
+            if (ticket) {
+                ticket.status = newStatus;
+                showToast(`Ticket ${id} status updated to ${newStatus}`, "success");
+                renderAdminTickets();
+                renderUserTickets();
+            }
+        }
+
+        function getStatusBadge(status) {
+            switch(status) {
+                case 'SUBMITTED':
+                    return `<span class="px-2.5 py-1 bg-blue-100 text-blue-800 rounded-md text-xs font-extrabold uppercase"><i class="fa-solid fa-paper-plane mr-1"></i> Submitted</span>`;
+                case 'CHECKED IN':
+                    return `<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-md text-xs font-extrabold uppercase"><i class="fa-solid fa-clipboard-check mr-1"></i> Checked In</span>`;
+                case 'IN PROGRESS':
+                    return `<span class="px-2.5 py-1 bg-purple-100 text-purple-800 rounded-md text-xs font-extrabold uppercase"><i class="fa-solid fa-spinner fa-spin mr-1"></i> In Progress</span>`;
+                case 'RESOLVED':
+                    return `<span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-md text-xs font-extrabold uppercase"><i class="fa-solid fa-circle-check mr-1"></i> Resolved</span>`;
+                default:
+                    return `<span class="px-2.5 py-1 bg-slate-100 text-slate-800 rounded-md text-xs font-bold">${status}</span>`;
+            }
+        }
+
+        function copyTicketId() {
+            const text = document.getElementById('conf-ticket-id').innerText;
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast("Ticket ID copied to clipboard!", "success");
+        }
+
+        // Gender Smart Validation Rule (PDF Requirement)
+        function handleGenderRule() {
+            const gender = document.getElementById('signup-gender').value;
+            const note = document.getElementById('gender-smart-note');
+            const reqTag = document.getElementById('phone-required-tag');
+
+            if (gender === 'Female') {
+                note.classList.remove('hidden');
+                reqTag.innerText = "(Optional)";
+            } else {
+                note.classList.add('hidden');
+                reqTag.innerText = "(Required)";
+            }
+        }
+
+        // Auth Logic & Modals
+        function openAuthModal() {
+            document.getElementById('auth-modal').classList.remove('hidden');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
+        }
+
+        function toggleAuthMode(mode) {
+            if (mode === 'signup') {
+                document.getElementById('form-login').classList.add('hidden');
+                document.getElementById('form-signup').classList.remove('hidden');
+                document.getElementById('auth-title').innerText = "Create Account";
+                document.getElementById('auth-subtitle').innerText = "Join CampusFix and make your campus better";
+            } else {
+                document.getElementById('form-signup').classList.add('hidden');
+                document.getElementById('form-login').classList.remove('hidden');
+                document.getElementById('auth-title').innerText = "Welcome Back!";
+                document.getElementById('auth-subtitle').innerText = "Login to continue to CampusFix";
+            }
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            currentUser = {
+                name: email.split('@')[0].toUpperCase(),
+                email: email,
+                role: email.includes('admin') ? 'Administrator' : 'Student',
+                initials: email.substring(0,2).toUpperCase()
+            };
+            updateUserUI();
+            closeAuthModal();
+            showToast(`Logged in as ${currentUser.name}`, "success");
+        }
+
+        function handleSignUp() {
+            const name = document.getElementById('signup-name').value || "New User";
+            const role = document.getElementById('signup-role').value;
+            currentUser = {
+                name: name,
+                email: document.getElementById('signup-email').value || "user@campus.edu",
+                role: role,
+                initials: name.substring(0,2).toUpperCase()
+            };
+            updateUserUI();
+            closeAuthModal();
+            showToast(`Welcome to CampusFix, ${currentUser.name}!`, "success");
+        }
+
+        function simulateSSO(provider) {
+            currentUser = {
+                name: `${provider} User`,
+                email: `user@${provider.toLowerCase()}.com`,
+                role: "Student",
+                initials: provider.substring(0,2).toUpperCase()
+            };
+            updateUserUI();
+            closeAuthModal();
+            showToast(`Authenticated via ${provider} SSO`, "success");
+        }
+
+        function updateUserUI() {
+            document.getElementById('user-display-name').innerText = currentUser.name;
+            document.getElementById('user-avatar-initials').innerText = currentUser.initials;
+            document.getElementById('user-role-badge').innerText = currentUser.role;
+        }
+
+        function showToast(message, type = "success") {
+            const toast = document.getElementById('toast');
+            const ico
