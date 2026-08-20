@@ -72,6 +72,30 @@
             border-color: rgba(147, 197, 253, 0.28);
             box-shadow: 0 8px 24px rgba(30, 64, 175, 0.34);
         }
+        .upper-ribbon #nav-links button {
+            color: rgba(239, 246, 255, 0.9);
+        }
+        .upper-ribbon #nav-links button:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.14);
+        }
+        .upper-ribbon #nav-links button.bg-blue-600 {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.22);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 5px 14px rgba(8, 47, 107, 0.28);
+        }
+        .upper-ribbon .text-blue-400 {
+            color: #bfdbfe !important;
+        }
+        .account-button {
+            background: rgba(255, 255, 255, 0.12) !important;
+            border-color: rgba(191, 219, 254, 0.38) !important;
+            color: #eff6ff !important;
+        }
+        .account-button:hover {
+            background: rgba(255, 255, 255, 0.22) !important;
+            color: #ffffff !important;
+        }
         button,
         select {
             position: relative;
@@ -162,7 +186,7 @@
                         <span class="text-xs font-medium text-slate-200" id="user-display-name">Guest User</span>
                         <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full font-semibold" id="user-role-badge">Student</span>
                     </div>
-                    <button onclick="openAuthModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-700 transition">
+                    <button onclick="openAuthModal()" class="account-button px-3 py-1.5 rounded-lg text-xs font-semibold border transition">
                         <i class="fa-solid fa-right-to-bracket mr-1"></i> Account
                     </button>
                 </div>
