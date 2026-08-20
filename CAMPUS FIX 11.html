@@ -32,11 +32,24 @@
         }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background:
+                radial-gradient(circle at 12% 8%, rgba(147, 197, 253, 0.32), transparent 28rem),
+                radial-gradient(circle at 88% 18%, rgba(167, 243, 208, 0.24), transparent 24rem),
+                linear-gradient(135deg, #f8fafc 0%, #eef6ff 48%, #f0fdf4 100%);
+            background-attachment: fixed;
+        }
         .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            background: rgba(255, 255, 255, 0.58);
+            -webkit-backdrop-filter: blur(18px) saturate(135%);
+            backdrop-filter: blur(18px) saturate(135%);
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            box-shadow: 0 18px 45px rgba(30, 64, 175, 0.09), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        }
+        .glass-panel:hover {
+            background: rgba(255, 255, 255, 0.68);
+            box-shadow: 0 22px 52px rgba(30, 64, 175, 0.13), inset 0 1px 0 rgba(255, 255, 255, 0.82);
         }
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
@@ -143,7 +156,7 @@
             </div>
 
             <!-- Form Card -->
-            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-6">
+            <div class="glass-panel rounded-2xl p-6 sm:p-8 space-y-6">
                 <form id="reportForm" onsubmit="handleAnalyzeReport(event)">
                     
                     <!-- 1. Handwritten Application (Required Hybrid Approach) -->
@@ -235,7 +248,7 @@
 
         <!-- SECTION 2: AI CLASSIFICATION & CONFIRMATION SCREEN -->
         <section id="view-ai-review" class="max-w-2xl mx-auto space-y-6 hidden">
-            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-xl border border-slate-200 space-y-6">
+            <div class="glass-panel rounded-2xl p-6 sm:p-8 space-y-6">
                 <!-- AI Banner -->
                 <div class="flex items-center space-x-4 border-b border-slate-100 pb-5">
                     <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 text-2xl flex-shrink-0">
@@ -308,7 +321,7 @@
 
         <!-- SECTION 3: SUBMISSION CONFIRMATION -->
         <section id="view-success" class="max-w-lg mx-auto space-y-6 hidden text-center">
-            <div class="bg-white rounded-2xl p-8 shadow-xl border border-slate-200 space-y-6">
+            <div class="glass-panel rounded-2xl p-8 space-y-6">
                 <!-- Check Icon -->
                 <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-3xl shadow-inner">
                     <i class="fa-solid fa-check"></i>
@@ -407,7 +420,7 @@
             </div>
 
             <!-- Filter Controls -->
-            <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200">
+            <div class="glass-panel flex flex-wrap items-center justify-between gap-3 p-4 rounded-xl">
                 <div class="flex items-center space-x-2 text-xs">
                     <span class="font-bold text-slate-500 uppercase">Filter Status:</span>
                     <select id="admin-filter-status" onchange="renderAdminTickets()" class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs font-medium outline-none">
@@ -439,7 +452,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Neha Kumari -->
-                <div class="bg-white rounded-2xl p-6 text-center border border-slate-200 shadow-sm hover:shadow-md transition">
+                <div class="glass-panel rounded-2xl p-6 text-center transition">
                     <div class="w-20 h-20 bg-gradient-to-tr from-pink-500 to-rose-400 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
                         NK
                     </div>
@@ -449,7 +462,7 @@
                 </div>
 
                 <!-- Ashwin Raj -->
-                <div class="bg-white rounded-2xl p-6 text-center border border-slate-200 shadow-sm hover:shadow-md transition">
+                <div class="glass-panel rounded-2xl p-6 text-center transition">
                     <div class="w-20 h-20 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
                         AR
                     </div>
@@ -459,7 +472,7 @@
                 </div>
 
                 <!-- Asad Iqbal -->
-                <div class="order-first bg-white rounded-2xl p-6 text-center border border-slate-200 shadow-sm hover:shadow-md transition">
+                <div class="order-first glass-panel rounded-2xl p-6 text-center transition">
                     <div class="w-20 h-20 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
                         AI
                     </div>
@@ -469,7 +482,7 @@
                 </div>
 
                 <!-- Sunny Raj -->
-                <div class="bg-white rounded-2xl p-6 text-center border border-slate-200 shadow-sm hover:shadow-md transition">
+                <div class="glass-panel rounded-2xl p-6 text-center transition">
                     <div class="w-20 h-20 bg-gradient-to-tr from-amber-500 to-orange-400 rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold shadow-lg">
                         SR
                     </div>
@@ -489,7 +502,7 @@
 
     <!-- AUTHENTICATION MODAL -->
     <div id="auth-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+        <div class="glass-panel rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
             <!-- Close Button -->
             <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1">
                 <i class="fa-solid fa-xmark text-lg"></i>
@@ -900,7 +913,7 @@
 
             if (tickets.length === 0) {
                 container.innerHTML = `
-                    <div class="bg-white p-8 rounded-2xl text-center border border-slate-200">
+                    <div class="glass-panel p-8 rounded-2xl text-center">
                         <i class="fa-solid fa-inbox text-4xl text-slate-300 mb-2"></i>
                         <p class="text-sm font-semibold text-slate-600">No issues reported yet.</p>
                         <button onclick="switchTab('report')" class="mt-3 text-xs text-blue-600 font-bold hover:underline">Raise a Complaint</button>
@@ -909,7 +922,7 @@
             }
 
             container.innerHTML = tickets.map(ticket => `
-                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition space-y-4">
+                <div class="glass-panel rounded-2xl p-5 transition space-y-4">
                     <!-- Top Line -->
                     <div class="flex flex-wrap justify-between items-center gap-2 pb-3 border-b border-slate-100">
                         <div class="flex items-center space-x-2">
@@ -969,12 +982,12 @@
             document.getElementById('stat-resolved').innerText = tickets.filter(t => t.status === 'RESOLVED').length;
 
             if (filtered.length === 0) {
-                container.innerHTML = `<div class="bg-white p-6 rounded-xl text-center text-slate-500 text-xs">No records found for filter "${filter}".</div>`;
+                container.innerHTML = `<div class="glass-panel p-6 rounded-xl text-center text-slate-500 text-xs">No records found for filter "${filter}".</div>`;
                 return;
             }
 
             container.innerHTML = filtered.map(t => `
-                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="glass-panel rounded-2xl p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div class="space-y-2 flex-1">
                         <div class="flex items-center space-x-2">
                             <span class="font-mono text-xs font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded border">${t.id}</span>
