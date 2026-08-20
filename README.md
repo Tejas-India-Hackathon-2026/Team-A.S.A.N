@@ -72,10 +72,15 @@ Creates a traceable complaint workflow with unique identifiers and status update
 
 CampusFix was developed as a hackathon project by a team of CSE (AI & ML) 2026 students.
 👥 Team
-Neha Kumari
-Ashwin Raj
-Asad Iqbal
-Sunny Raj
+1.Asad Iqbal
+
+2.Ashwin Raj
+
+3.Neha Kumari
+
+4.Sunny Raj
+
+
 Our goal was to use AI & ML concepts to create a practical real-world campus solution, particularly through intelligent complaint analysis and smart 
 routing.
 
