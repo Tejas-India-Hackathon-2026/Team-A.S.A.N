@@ -158,7 +158,7 @@
                         
                         <div id="handwritten-dropzone" onclick="document.getElementById('handwritten-input').click()" 
                              class="border-2 border-dashed border-slate-300 rounded-xl p-5 text-center bg-slate-50 hover:bg-slate-100/80 transition cursor-pointer relative group">
-                            <input type="file" id="handwritten-input" accept="image/*" class="hidden" onchange="previewImage(this, 'handwritten-preview', 'handwritten-dropzone')">
+                            <input type="file" id="handwritten-input" accept="image/*" class="hidden" onclick="event.stopPropagation()" onchange="previewImage(this, 'handwritten-preview', 'handwritten-dropzone')">
                             
                             <div id="handwritten-placeholder" class="space-y-2">
                                 <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto text-blue-600 group-hover:scale-110 transition">
@@ -184,7 +184,7 @@
                         </label>
                         <div id="problem-dropzone" onclick="document.getElementById('problem-input').click()" 
                              class="border-2 border-dashed border-slate-200 rounded-xl p-4 text-center bg-slate-50 hover:bg-slate-100/80 transition cursor-pointer relative group">
-                            <input type="file" id="problem-input" accept="image/*" class="hidden" onchange="previewImage(this, 'problem-preview', 'problem-dropzone')">
+                            <input type="file" id="problem-input" accept="image/*" class="hidden" onclick="event.stopPropagation()" onchange="previewImage(this, 'problem-preview', 'problem-dropzone')">
                             
                             <div id="problem-placeholder" class="space-y-1">
                                 <i class="fa-solid fa-camera text-slate-400 text-xl group-hover:text-blue-500 transition"></i>
@@ -593,11 +593,11 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Password</label>
-                        <input type="password" placeholder="••••••••" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm outline-none">
+                        <input type="password" id="signup-password" placeholder="••••••••" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Confirm Password</label>
-                        <input type="password" placeholder="••••••••" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm outline-none">
+                        <input type="password" id="signup-confirm-password" placeholder="••••••••" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm outline-none">
                     </div>
                 </div>
 
@@ -665,6 +665,7 @@
         // Initialize App on Load
         window.onload = function() {
             updateUserUI();
+            handleGenderRule();
             renderUserTickets();
             renderAdminTickets();
         };
@@ -699,6 +700,17 @@
         // Image Preview Handler
         function previewImage(input, previewId, dropzoneId) {
             if (input.files && input.files[0]) {
+                const file = input.files[0];
+                if (!file.type.startsWith('image/')) {
+                    input.value = '';
+                    showToast("Please select an image file.", "error");
+                    return;
+                }
+                if (file.size > 5 * 1024 * 1024) {
+                    input.value = '';
+                    showToast("Image must be 5MB or smaller.", "error");
+                    return;
+                }
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const preview = document.getElementById(previewId);
@@ -1036,9 +1048,11 @@
             if (gender === 'Female') {
                 note.classList.remove('hidden');
                 reqTag.innerText = "(Optional)";
+                document.getElementById('signup-phone').required = false;
             } else {
                 note.classList.add('hidden');
                 reqTag.innerText = "(Required)";
+                document.getElementById('signup-phone').required = true;
             }
         }
 
@@ -1066,7 +1080,11 @@
         }
 
         function handleLogin() {
-            const email = document.getElementById('login-email').value;
+            const email = document.getElementById('login-email').value.trim();
+            if (!email || !email.includes('@')) {
+                showToast("Please enter a valid email address.", "error");
+                return;
+            }
             currentUser = {
                 name: email.split('@')[0].toUpperCase(),
                 email: email,
@@ -1079,11 +1097,37 @@
         }
 
         function handleSignUp() {
-            const name = document.getElementById('signup-name').value || "New User";
+            const name = document.getElementById('signup-name').value.trim() || "New User";
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+            const gender = document.getElementById('signup-gender').value;
+            const phone = document.getElementById('signup-phone');
+
+            if (!email || !email.includes('@')) {
+                showToast("Please enter a valid email address.", "error");
+                return;
+            }
+            if (password.length < 8) {
+                showToast("Password must be at least 8 characters.", "error");
+                return;
+            }
+            if (password !== confirmPassword) {
+                showToast("Passwords do not match.", "error");
+                return;
+            }
+            if (gender === 'Male' && !phone.value.trim()) {
+                showToast("Phone number is required for this account.", "error");
+                return;
+            }
+            if (!document.getElementById('terms-check').checked) {
+                showToast("Please accept the Terms & Conditions to continue.", "error");
+                return;
+            }
             const role = document.getElementById('signup-role').value;
             currentUser = {
                 name: name,
-                email: document.getElementById('signup-email').value || "user@campus.edu",
+                email: email,
                 role: role,
                 initials: name.substring(0,2).toUpperCase()
             };
@@ -1110,6 +1154,38 @@
             document.getElementById('user-role-badge').innerText = currentUser.role;
         }
 
+        function handleForgotPassword() {
+            const email = document.getElementById('login-email').value.trim();
+            if (!email || !email.includes('@')) {
+                showToast("Enter your email first to reset your password.", "error");
+                return;
+            }
+            showToast(`Password reset link sent to ${email}.`, "success");
+        }
+
         function showToast(message, type = "success") {
             const toast = document.getElementById('toast');
-            const ico
+            const icon = document.getElementById('toast-icon');
+            const messageElement = document.getElementById('toast-message');
+            const isError = type === "error";
+            messageElement.innerText = message;
+            icon.className = isError ? "fa-solid fa-circle-exclamation text-red-400 text-lg" : "fa-solid fa-circle-check text-emerald-400 text-lg";
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            clearTimeout(window.toastTimer);
+            window.toastTimer = setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3200);
+        }
+
+        document.getElementById('auth-modal').addEventListener('click', function(event) {
+            if (event.target === this) closeAuthModal();
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') closeAuthModal();
+        });
+    </script>
+</body>
+</html>
