@@ -193,6 +193,24 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Facility Category -->
+                    <div class="border-b border-slate-200/70 pb-5 space-y-2">
+                        <label for="problem-category" class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Facility Category <span class="text-red-500">*</span></label>
+                        <select id="problem-category" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm outline-none focus:ring-2 focus:ring-blue-500 bg-white/70">
+                            <option value="">Select the affected facility</option>
+                            <option value="Electrical Maintenance">Electricity &amp; Electrical</option>
+                            <option value="Plumbing Department">Plumbing &amp; Water Supply</option>
+                            <option value="Internet & IT Support">Internet &amp; IT Support</option>
+                            <option value="Cleaning &amp; Sanitation">Cleaning &amp; Sanitation</option>
+                            <option value="Carpentry &amp; Furniture">Carpentry &amp; Furniture</option>
+                            <option value="Civil Maintenance">Civil Works &amp; Building</option>
+                            <option value="Hostel Facilities">Hostel Facilities</option>
+                            <option value="Security Department">Security &amp; Safety</option>
+                            <option value="Transport Department">Transport &amp; Parking</option>
+                            <option value="General Maintenance">Other Campus Facility</option>
+                        </select>
+                    </div>
                     
                     <!-- 1. Handwritten Application (Required Hybrid Approach) -->
                     <div class="space-y-2">
@@ -831,11 +849,12 @@
             const reporterName = document.getElementById('reporter-name').value.trim();
             const reporterRollNumber = document.getElementById('reporter-roll-number').value.trim();
             const reporterMobileNumber = document.getElementById('reporter-mobile-number').value.trim();
+            const selectedCategory = document.getElementById('problem-category').value;
             const desc = document.getElementById('problem-description').value.trim();
             const loc = document.getElementById('problem-location').value.trim();
 
-            if (!reporterName || !reporterRollNumber || !reporterMobileNumber) {
-                showToast("Please complete all mandatory reporter details.", "error");
+            if (!reporterName || !reporterRollNumber || !reporterMobileNumber || !selectedCategory) {
+                showToast("Please complete the required reporter details and choose a facility.", "error");
                 return;
             }
             if (!handwrittenInput.files.length) {
@@ -850,13 +869,14 @@
 
             try {
                 // Call Gemini API for smart classification
-                const aiResult = await callGeminiAnalysis(desc, loc);
+                const aiResult = await callGeminiAnalysis(desc, loc, selectedCategory);
 
                 currentPendingReport = {
                     id: "CYRAMANG" + Math.floor(1000000000 + Math.random() * 9000000000),
                     reporterName: reporterName,
                     reporterRollNumber: reporterRollNumber,
                     reporterMobileNumber: reporterMobileNumber,
+                    reportedCategory: selectedCategory,
                     category: aiResult.department || "General Maintenance",
                     summary: aiResult.summary || desc,
                     description: desc,
@@ -897,7 +917,7 @@
                     name: reporterName,
                     rollNumber: reporterRollNumber,
                     mobileNumber: reporterMobileNumber
-                });
+                }, selectedCategory);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = originalBtnHtml;
@@ -905,7 +925,7 @@
         }
 
         // Live Gemini API Call using gemini-3-flash-preview
-        async function callGeminiAnalysis(description, location) {
+        async function callGeminiAnalysis(description, location, selectedCategory) {
             const apiKey = ""; // API key passed via runtime
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
@@ -913,7 +933,7 @@
 
             const payload = {
                 contents: [{
-                    parts: [{ text: `Analyze this complaint: "${description}" at location: "${location}". Return pure JSON with keys: department, priority, summary.` }]
+                    parts: [{ text: `Analyze this complaint: "${description}" at location: "${location}". The user selected facility category "${selectedCategory}". Use that category as the primary routing signal. Return pure JSON with keys: department, priority, summary.` }]
                 }],
                 systemInstruction: { parts: [{ text: systemPrompt }] },
                 generationConfig: {
@@ -942,19 +962,21 @@
             return JSON.parse(text);
         }
 
-        function fallbackAnalysis(desc, loc, reporter = {}) {
-            let dept = "General Maintenance";
+        function fallbackAnalysis(desc, loc, reporter = {}, selectedCategory = "General Maintenance") {
+            let dept = selectedCategory;
             let prio = "MEDIUM";
             const lower = desc.toLowerCase();
 
-            if (lower.includes('bulb') || lower.includes('light') || lower.includes('fan') || lower.includes('wire') || lower.includes('electricity')) {
-                dept = "Electrical Maintenance";
-            } else if (lower.includes('leak') || lower.includes('pipe') || lower.includes('water') || lower.includes('tap') || lower.includes('washroom')) {
-                dept = "Plumbing Department";
-            } else if (lower.includes('door') || lower.includes('desk') || lower.includes('chair') || lower.includes('window')) {
-                dept = "Carpentry & Furniture";
-            } else if (lower.includes('wifi') || lower.includes('router') || lower.includes('internet') || lower.includes('lan')) {
-                dept = "IT Infrastructure";
+            if (selectedCategory === "General Maintenance") {
+                if (lower.includes('bulb') || lower.includes('light') || lower.includes('fan') || lower.includes('wire') || lower.includes('electricity')) {
+                    dept = "Electrical Maintenance";
+                } else if (lower.includes('leak') || lower.includes('pipe') || lower.includes('water') || lower.includes('tap') || lower.includes('washroom')) {
+                    dept = "Plumbing Department";
+                } else if (lower.includes('door') || lower.includes('desk') || lower.includes('chair') || lower.includes('window')) {
+                    dept = "Carpentry & Furniture";
+                } else if (lower.includes('wifi') || lower.includes('router') || lower.includes('internet') || lower.includes('lan')) {
+                    dept = "IT Infrastructure";
+                }
             }
 
             if (lower.includes('urgent') || lower.includes('danger') || lower.includes('spark') || lower.includes('overflow')) {
@@ -966,6 +988,7 @@
                 reporterName: reporter.name || "",
                 reporterRollNumber: reporter.rollNumber || "",
                 reporterMobileNumber: reporter.mobileNumber || "",
+                reportedCategory: selectedCategory,
                 category: dept,
                 summary: desc.length > 90 ? desc.substring(0, 90) + "..." : desc,
                 description: desc,
