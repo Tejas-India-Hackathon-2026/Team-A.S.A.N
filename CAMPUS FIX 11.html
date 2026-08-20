@@ -98,6 +98,23 @@
             background: rgba(255, 255, 255, 0.22) !important;
             color: #ffffff !important;
         }
+        .report-hero {
+            background: linear-gradient(135deg, rgba(239, 246, 255, 0.92), rgba(219, 234, 254, 0.72) 52%, rgba(224, 242, 254, 0.86));
+            color: #0f172a;
+            border: 2px solid rgba(147, 197, 253, 0.9);
+            box-shadow: 0 20px 44px rgba(30, 64, 175, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        }
+        .report-hero .report-badge {
+            background: rgba(255, 255, 255, 0.62);
+            color: #1d4ed8;
+            border-color: rgba(96, 165, 250, 0.78);
+        }
+        .report-hero .report-copy {
+            color: #334155;
+        }
+        .report-hero .report-mark {
+            color: rgba(37, 99, 235, 0.16);
+        }
         button,
         select {
             position: relative;
@@ -222,18 +239,18 @@
         <!-- SECTION 1: REPORT COMPLAINT VIEW -->
         <section id="view-report" class="max-w-3xl mx-auto space-y-6">
             <!-- Header Banner -->
-            <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden border border-slate-800">
+            <div class="report-hero rounded-2xl p-6 sm:p-8 relative overflow-hidden">
                 <div class="relative z-10">
-                    <div class="inline-flex items-center space-x-2 bg-blue-500/20 text-blue-300 border border-blue-500/30 px-3 py-1 rounded-full text-xs font-semibold mb-3">
+                    <div class="report-badge inline-flex items-center space-x-2 border px-3 py-1 rounded-full text-xs font-semibold mb-3">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
                         <span>AI-Powered Routing Active</span>
                     </div>
                     <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Report a Campus Problem</h1>
-                    <p class="text-slate-300 text-sm mt-1 max-w-xl">
+                    <p class="report-copy text-sm mt-1 max-w-xl">
                         Snap a photo, describe the issue, and our Gemini AI will analyze and route it to the right department instantly.
                     </p>
                 </div>
-                <i class="fa-solid fa-screwdriver-wrench absolute -right-6 -bottom-6 text-9xl text-white/5 transform -rotate-12"></i>
+                <i class="report-mark fa-solid fa-screwdriver-wrench absolute -right-6 -bottom-6 text-9xl transform -rotate-12"></i>
             </div>
 
             <!-- Form Card -->
