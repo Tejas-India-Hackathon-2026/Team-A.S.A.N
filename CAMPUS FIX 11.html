@@ -86,7 +86,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <!-- Logo -->
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('report')">
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="goToHomepage()" onkeydown="if (event.key === 'Enter' || event.key === ' ') goToHomepage()" role="link" tabindex="0" aria-label="Go to CampusFix homepage">
                     <div class="campus-logo w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30 text-white" aria-label="CampusFix logo" title="CampusFix">
                         <i class="fa-solid fa-building-columns text-xl drop-shadow-md" aria-hidden="true"></i>
                     </div>
@@ -789,6 +789,10 @@
             if (tab === 'admin') renderAdminTickets();
             
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goToHomepage() {
+            switchTab('report');
         }
 
         // Image Preview Handler
