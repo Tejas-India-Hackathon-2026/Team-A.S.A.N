@@ -141,6 +141,32 @@
         .report-hero .report-mark {
             color: rgba(37, 99, 235, 0.16);
         }
+        .process-ribbon {
+            background: rgba(239, 246, 255, 0.78);
+            border: 1px solid rgba(147, 197, 253, 0.76);
+            box-shadow: 0 14px 32px rgba(30, 64, 175, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.88);
+        }
+        .process-step {
+            position: relative;
+        }
+        .process-step:not(:last-child)::after {
+            content: '\2192';
+            position: absolute;
+            right: -0.9rem;
+            top: 1.45rem;
+            color: #2563eb;
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+        @media (max-width: 639px) {
+            .process-step:not(:last-child)::after {
+                content: '\2193';
+                right: auto;
+                top: auto;
+                bottom: -1.05rem;
+                left: 50%;
+            }
+        }
         button,
         select {
             position: relative;
@@ -373,6 +399,38 @@
                 <div class="glass-panel rounded-2xl p-5"><i class="fa-solid fa-brain text-indigo-600 text-xl"></i><h2 class="mt-3 font-bold text-slate-900">Smart routing</h2><p class="mt-1 text-xs leading-relaxed text-slate-600">AI helps classify electricity, plumbing, IT, sanitation, hostel, and other facilities.</p></div>
                 <div class="glass-panel rounded-2xl p-5"><i class="fa-solid fa-route text-emerald-600 text-xl"></i><h2 class="mt-3 font-bold text-slate-900">Track progress</h2><p class="mt-1 text-xs leading-relaxed text-slate-600">Follow submitted, checked-in, in-progress, and resolved stages.</p></div>
                 <div class="glass-panel rounded-2xl p-5"><i class="fa-solid fa-shield-halved text-amber-600 text-xl"></i><h2 class="mt-3 font-bold text-slate-900">Campus coordination</h2><p class="mt-1 text-xs leading-relaxed text-slate-600">Admins can review tickets, attachments, priorities, and status updates.</p></div>
+            </div>
+
+            <div class="process-ribbon rounded-2xl p-5 sm:p-6">
+                <div class="flex items-center justify-between gap-3 mb-5">
+                    <div>
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-blue-700">Complaint Resolution Process</p>
+                        <h2 class="text-lg font-extrabold text-slate-900">From submission to resolution</h2>
+                    </div>
+                    <i class="fa-solid fa-arrows-turn-to-dots text-blue-600 text-2xl"></i>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-5 sm:gap-4 text-center">
+                    <div class="process-step space-y-2">
+                        <div class="mx-auto w-11 h-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold shadow-lg">1</div>
+                        <h3 class="text-xs font-bold text-slate-900">Submit Complaint</h3>
+                        <p class="text-[11px] leading-relaxed text-slate-600">Provide the issue, location, and supporting documents.</p>
+                    </div>
+                    <div class="process-step space-y-2">
+                        <div class="mx-auto w-11 h-11 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold shadow-lg">2</div>
+                        <h3 class="text-xs font-bold text-slate-900">Department In-charge Review</h3>
+                        <p class="text-[11px] leading-relaxed text-slate-600">The responsible department in-charge checks the complaint.</p>
+                    </div>
+                    <div class="process-step space-y-2">
+                        <div class="mx-auto w-11 h-11 rounded-full bg-violet-600 text-white flex items-center justify-center font-bold shadow-lg">3</div>
+                        <h3 class="text-xs font-bold text-slate-900">Forwarded to Resolution Team</h3>
+                        <p class="text-[11px] leading-relaxed text-slate-600">The in-charge forwards it to the team assigned to resolve it.</p>
+                    </div>
+                    <div class="process-step space-y-2">
+                        <div class="mx-auto w-11 h-11 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold shadow-lg">4</div>
+                        <h3 class="text-xs font-bold text-slate-900">Track Resolution</h3>
+                        <p class="text-[11px] leading-relaxed text-slate-600">Follow progress until the issue is marked resolved.</p>
+                    </div>
+                </div>
             </div>
 
             <div class="glass-panel rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
