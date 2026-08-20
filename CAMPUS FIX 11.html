@@ -145,9 +145,22 @@
             background: rgba(239, 246, 255, 0.78);
             border: 1px solid rgba(147, 197, 253, 0.76);
             box-shadow: 0 14px 32px rgba(30, 64, 175, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.88);
+            transform: perspective(1100px) rotateX(0deg) rotateY(0deg) translateY(0);
+            transform-style: preserve-3d;
+            transition: transform 240ms ease, box-shadow 240ms ease;
+        }
+        .process-ribbon:hover {
+            transform: perspective(1100px) rotateX(1deg) rotateY(-1deg) translateY(-5px);
+            box-shadow: 0 24px 48px rgba(30, 64, 175, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.95);
         }
         .process-step {
             position: relative;
+            transform: translateZ(0) scale(1);
+            transition: transform 220ms ease, filter 220ms ease;
+        }
+        .process-step:hover {
+            transform: translateZ(22px) scale(1.045);
+            filter: drop-shadow(0 12px 10px rgba(30, 64, 175, 0.2));
         }
         .process-step:not(:last-child)::after {
             content: '\2192';
@@ -165,6 +178,19 @@
                 top: auto;
                 bottom: -1.05rem;
                 left: 50%;
+            }
+        }
+        @media (hover: none), (prefers-reduced-motion: reduce) {
+            .process-ribbon,
+            .process-step {
+                transition: none;
+            }
+            .process-ribbon:hover {
+                transform: none;
+            }
+            .process-step:hover {
+                transform: none;
+                filter: none;
             }
         }
         button,
