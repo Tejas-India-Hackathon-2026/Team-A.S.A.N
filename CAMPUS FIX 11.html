@@ -1121,11 +1121,12 @@
 
         // Initialize App on Load
         window.onload = function() {
+            initializeDashboardRole();
             updateUserUI();
             handleGenderRule();
             renderUserTickets();
             renderAdminTickets();
-            switchTab('home');
+            switchTab(currentUser.role === 'Administrator' ? 'admin' : 'home');
         };
 
         // Tab Navigation Switcher
@@ -1157,6 +1158,25 @@
 
         function goToHomepage() {
             switchTab('home');
+        }
+
+        function initializeDashboardRole() {
+            const role = new URLSearchParams(window.location.search).get('role');
+            if (role === 'admin') {
+                currentUser.role = 'Administrator';
+                currentUser.name = 'Campus Administrator';
+                currentUser.email = 'admin@campus.edu';
+                currentUser.initials = 'CA';
+                return;
+            }
+            if (role === 'partner') {
+                currentUser.role = 'Partner';
+                currentUser.name = 'Campus Partner';
+                currentUser.email = 'partner@campus.edu';
+                currentUser.initials = 'CP';
+                return;
+            }
+            currentUser.role = 'Student';
         }
 
         function raiseComplaint() {
