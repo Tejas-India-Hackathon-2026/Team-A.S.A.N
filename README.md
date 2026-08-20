@@ -57,3 +57,31 @@ The showcase also demonstrates secure account access and Google/Microsoft SSO in
 👁️ Transparent complaint status
 ✅ Resolution tracking
 📱 Mobile-first user experience
+🎯 Why CampusFix?
+CampusFix focuses on four major outcomes:
+⏱️ Saves Time
+Reduces unnecessary manual communication and makes complaint submission easier.
+🔎 Transparency
+Users can track the progress of their complaints instead of being left without updates.
+💬 Better Communication
+Connects students and staff with the appropriate maintenance team.
+** accountability**
+Creates a traceable complaint workflow with unique identifiers and status updates.
+🏆 Hackathon Project
+CampusFix was developed as a hackathon project by a team of CSE (AI & ML) 2026 students.
+👥 Team
+Neha Kumari
+Ashwin Raj
+Asad Iqbal
+Sunny Raj
+Our goal was to use AI & ML concepts to create a practical real-world campus solution, particularly through intelligent complaint analysis and smart routing.
+🔑 Keywords
+AI Artificial Intelligence Machine Learning AI-ML Smart Campus Campus Management Complaint Management System Issue Tracking Complaint Tracking AI Complaint Classification Priority Routing Smart Routing Real-Time Tracking Ticket Management Automated Ticketing Campus Maintenance Digital Complaint System Problem Reporting Role-Based Access Secure Authentication SSO Google SSO Microsoft SSO Visual Evidence Image Upload Location-Based Reporting AI Analysis Executive Summary Transparency Accountability Student Portal Admin Portal Hackathon Project AI & ML Project Smart City Digital Transformation
+🌟 Vision
+CampusFix aims to transform the traditional campus complaint process into a smart, transparent, AI-assisted resolution system.
+Together, we report. Together, we resolve. Together, we build a better campus. ⚡
+📌 Project Status
+🚧 Hackathon Prototype
+This project was created as a hackathon prototype and can be further expanded with additional AI capabilities, integrations, analytics, notifications, and campus-management features.
+⚡ CampusFix
+Report. Track. Resolve.
