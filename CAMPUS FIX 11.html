@@ -141,6 +141,24 @@
         .report-hero .report-mark {
             color: rgba(37, 99, 235, 0.16);
         }
+        .admin-control-panel {
+            background: linear-gradient(135deg, rgba(220, 252, 231, 0.94), rgba(187, 247, 208, 0.78));
+            color: #14532d;
+            border: 1px solid rgba(74, 222, 128, 0.62);
+            box-shadow: 0 18px 40px rgba(22, 101, 52, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+        .admin-control-panel .admin-label {
+            background: rgba(255, 255, 255, 0.62);
+            color: #166534;
+            border-color: rgba(74, 222, 128, 0.62);
+        }
+        .admin-control-panel .admin-description {
+            color: #365314;
+        }
+        .admin-stat-card {
+            background: rgba(255, 255, 255, 0.52);
+            border: 1px solid rgba(74, 222, 128, 0.42);
+        }
         .process-ribbon {
             background: rgba(239, 246, 255, 0.78);
             border: 1px solid rgba(147, 197, 253, 0.76);
@@ -757,28 +775,28 @@
         <!-- SECTION 5: ADMIN DASHBOARD -->
         <section id="view-admin" class="space-y-6 hidden">
             <!-- Header -->
-            <div class="bg-slate-900 text-white p-6 rounded-2xl flex flex-col md:flex-row justify-between md:items-center gap-4">
+            <div class="admin-control-panel p-6 rounded-2xl flex flex-col md:flex-row justify-between md:items-center gap-4">
                 <div>
                     <div class="flex items-center space-x-2">
-                        <span class="bg-red-500/20 text-red-300 text-[10px] font-bold px-2 py-0.5 rounded uppercase border border-red-500/30">Admin Panel</span>
+                        <span class="admin-label text-[10px] font-bold px-2 py-0.5 rounded uppercase border">Admin Panel</span>
                         <h1 class="text-xl font-bold">Campus Operations Control</h1>
                     </div>
-                    <p class="text-xs text-slate-400 mt-1">Review incoming issues, update resolution status, and manage department dispatches.</p>
+                    <p class="admin-description text-xs mt-1">Review incoming issues, update resolution status, and manage department dispatches.</p>
                 </div>
                 
                 <!-- Quick Stats -->
                 <div class="flex items-center space-x-3 text-center">
-                    <div class="bg-slate-800 px-3 py-2 rounded-xl border border-slate-700">
-                        <p class="text-[10px] text-slate-400 uppercase font-semibold">Total Issues</p>
-                        <p class="text-lg font-bold text-white" id="stat-total">0</p>
+                    <div class="admin-stat-card px-3 py-2 rounded-xl">
+                        <p class="text-[10px] text-green-800 uppercase font-semibold">Total Issues</p>
+                        <p class="text-lg font-bold text-green-950" id="stat-total">0</p>
                     </div>
-                    <div class="bg-slate-800 px-3 py-2 rounded-xl border border-slate-700">
-                        <p class="text-[10px] text-amber-400 uppercase font-semibold">Pending</p>
-                        <p class="text-lg font-bold text-amber-400" id="stat-pending">0</p>
+                    <div class="admin-stat-card px-3 py-2 rounded-xl">
+                        <p class="text-[10px] text-amber-700 uppercase font-semibold">Pending</p>
+                        <p class="text-lg font-bold text-amber-800" id="stat-pending">0</p>
                     </div>
-                    <div class="bg-slate-800 px-3 py-2 rounded-xl border border-slate-700">
-                        <p class="text-[10px] text-emerald-400 uppercase font-semibold">Resolved</p>
-                        <p class="text-lg font-bold text-emerald-400" id="stat-resolved">0</p>
+                    <div class="admin-stat-card px-3 py-2 rounded-xl">
+                        <p class="text-[10px] text-emerald-700 uppercase font-semibold">Resolved</p>
+                        <p class="text-lg font-bold text-emerald-800" id="stat-resolved">0</p>
                     </div>
                 </div>
             </div>
