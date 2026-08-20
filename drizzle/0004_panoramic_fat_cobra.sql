@@ -1,0 +1,2 @@
+ALTER TABLE `userProfiles` ADD `staffApprovalStatus` enum('not_required','pending','approved','rejected') DEFAULT 'not_required' NOT NULL;--> statement-breakpoint
+ALTER TABLE `userProfiles` ADD `staffPhotoKey` varchar(512);

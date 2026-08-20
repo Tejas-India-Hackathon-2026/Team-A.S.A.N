@@ -1,0 +1,108 @@
+# Project TODO
+
+- [x] Establish CampusFix product vocabulary, user journeys, and information architecture around the exact tagline "Report · Track · Resolve".
+- [x] Create a polished, responsive public landing page with CampusFix branding, feature highlights, and clear role-aware calls to action.
+- [x] Extend Manus OAuth-backed user profiles with name, email, role, hostel, and gender fields.
+- [x] Implement role-aware access patterns for Student, Staff, and Admin users.
+- [x] Define and migrate secure complaint, attachment, activity, and notification data models.
+- [x] Build a mobile-first complaint submission form with description, hostel, block, room, optional photo, and optional scanned/handwritten application inputs.
+- [x] Implement secure storage and access control for uploaded complaint photos and documents.
+- [x] Integrate AI-powered complaint analysis with a three-field structured response: department category, priority level, and AI summary.
+- [x] Build an AI review screen where users can edit or confirm a classified complaint before final submission.
+- [x] Generate a unique complaint ID and build a detailed submission confirmation screen with assigned department.
+- [x] Build a personal complaint dashboard with ticket list, status timeline, ticket details, and live refresh behavior.
+- [x] Build an Admin complaint management dashboard with filters for department, priority, and status plus complaint detail drill-down.
+- [x] Enable Admin complaint-status updates through the Pending, Checked In, In Progress, and Resolved workflow stages.
+- [x] Create in-app notifications for submitters when their complaint status changes.
+- [x] Add automated owner notifications for status changes where supported.
+- [x] Add robust loading, empty, validation, error, and success states throughout all journeys.
+- [x] Add and run Vitest coverage for core backend contracts and complaint workflow behavior.
+- [x] Generate and verify a Vitest coverage report for the CampusFix backend contract and workflow tests.
+- [x] Visually verify desktop and mobile layouts, then refine accessibility, motion, and UI details.
+- [x] Publish the validated CampusFix checkpoint through the project Publish control and provide the resulting public URL.
+- [x] Deliver the verified live CampusFix URL and updated checkpoint to the user.
+- [x] Fix profile.me returning undefined for users without a stored profile, which breaks the /report page query.
+- [x] Add a regression test for the defined profile-query response and validate the corrected report page.
+- [x] Release the profile-query correction as a new publish-ready checkpoint.
+- [x] Make the administrator login/access control compact and visually secondary to student complaint filing.
+- [x] Strengthen visual emphasis for the student File a Complaint section and its primary action.
+- [x] Add secure mobile-number collection to student profiles with gender-aware validation: optional for Female and required for other gender selections.
+- [x] Save the validated profile and complaint experience as a new release checkpoint.
+- [x] Confirm the scope of trial complaint data to be permanently removed.
+- [x] Delete the confirmed trial complaint records and their dependent activity, attachment, and notification data.
+- [x] Verify that the confirmed trial data has been removed and report the result.
+- [x] Remove all trial evidence storage-key references; the managed secure-storage layer exposes no physical-delete endpoint, and unreferenced random-key evidence is no longer reachable through CampusFix.
+- [x] Remove the complaint-status showcase from the public homepage while retaining authenticated complaint tracking.
+- [x] Save the verified homepage refinement as a new release checkpoint.
+- [x] Route first-time complaint filers through a registration/profile-completion step before the complaint form.
+- [x] Preserve direct complaint access for returning users with a completed profile.
+- [x] Save the tested first-time registration flow as a new release checkpoint.
+- [x] Implement and verify the student-facing Profile section for viewing registered campus details.
+- [x] Wire the profile editor to the profile API with existing gender-aware mobile-number validation, then validate it.
+- [x] Save the validated student profile-management flow as a new release checkpoint.
+- [x] Replace the complaint-entry redirect with a single email-first registration screen and a separate existing-user action; the requested mobile-only identity path was superseded to avoid unverified accounts.
+- [x] Persist first-time registration data through the existing secure user and profile records without allowing unverified identity access.
+- [x] Verify the supported first-time registration and returning-user routing paths on desktop and mobile.
+- [x] Replace complaint-entry authentication with email-only OTP registration and returning-user sign-in; superseded because the built-in Manus service cannot deliver OTPs to arbitrary end-user emails.
+- [x] Add secure OTP issuance, expiry, verification, and first-time registration persistence; superseded because custom end-user OTP delivery is unavailable without a transactional-email provider.
+- [x] Configure transactional email delivery credentials for verified OTP messages; deferred at the user's request in favor of the supported Manus email sign-in path.
+- [x] Test the email OTP registration and sign-in paths; superseded by the tested Manus-verified email sign-in flow.
+- [x] Verify whether built-in Manus services can securely deliver end-user email OTPs for CampusFix; the available service sends project-owner notifications only and cannot send OTPs to arbitrary users.
+- [x] Confirm retention of Manus-verified email login rather than a custom transactional-email provider.
+- [x] Confirm use of the supported single email-first Manus sign-in path rather than custom OTP delivery.
+- [x] Simplify the complaint-entry screen to a single Continue with email action using Manus-verified sign-in.
+- [x] Save the validated simplified email-first entry flow as a new release checkpoint.
+- [x] Add a distinct Already registered? Log in action that uses the supported Manus email sign-in path.
+- [x] Visually verify the revised email-first complaint-entry screen on desktop and mobile, including first-time and returning-user routing behavior.
+- [x] Simplify the complaint-entry interface to the supported single email-first sign-in path without exposing unnecessary login choices.
+- [x] Add a prominent student-facing File a Complaint entry point and complaint-category selection experience.
+- [x] Expand the student workspace with the comprehensive complaint categories, ticket details, filters, and progress information appropriate for the submitting user.
+- [x] Preserve administrator-only complaint management actions while making relevant complaint information visible to students.
+- [x] Save the validated student experience as a new publish-ready checkpoint.
+- [x] Replace free-form student hostel entry with the specified selectable choices: Aryabhatta Bhawan, C.V Raman Bhawan, and Vaishali Bhawan.
+- [x] Update registration and profile validation coverage for the specified hostel choices.
+- [x] Save the validated hostel-selection update as a new release checkpoint.
+- [x] Enforce the three approved hostel choices in backend validation for profile updates and complaint submissions.
+- [x] Add roll number and registration number columns to secure student profiles through a database migration.
+- [x] Add required roll number and registration number fields to registration and profile editing, with server-side validation.
+- [x] Add automated coverage for roll number and registration number persistence and validation.
+- [x] Save the validated student identifier update as a new release checkpoint.
+- [x] Add an administrator-only registered-user statistics query with total, student, and staff counts.
+- [x] Add a registered-user dashboard card to the administrator Command center.
+- [x] Add automated coverage for administrator access and registered-user statistics.
+- [x] Save the validated registered-user dashboard update as a new release checkpoint.
+- [x] Add administrator-only applicant profile data to selected complaint details.
+- [x] Add an Applicant details section to the Command center complaint panel, including registered student identifiers and contact information.
+- [x] Add privacy and access-control coverage for applicant details within administrator complaint views.
+- [x] Save the validated applicant-details update as a new release checkpoint.
+- [x] Diagnose and fix the onboarding tRPC request that receives HTML instead of valid JSON.
+- [x] Add regression coverage for onboarding profile loading under the web-development preview query parameters.
+- [x] Save the validated onboarding API-response correction as a new release checkpoint.
+- [x] Add a pending-approval status for newly registered staff profiles through a database migration.
+- [x] Restrict pending staff accounts from CampusFix workspace and complaint actions until administrator approval.
+- [x] Add administrator-only staff approval and rejection controls to the Command center.
+- [x] Add automated coverage for pending-staff restrictions and administrator approval actions.
+- [x] Add optional secure staff photo upload, persistence, and administrator-only review during approval.
+- [x] Make staff photo required in registration form validation and server-side profile updates.
+- [x] Add regression coverage rejecting staff registrations without a photo while preserving student registration behavior.
+- [x] Save the validated mandatory staff-photo update as a new release checkpoint.
+- [x] Save the validated staff approval workflow as a new release checkpoint.
+- [x] Add a solid accessible background and visible focus treatment to the sidebar menu control.
+- [x] Visually verify the sidebar menu-control contrast on desktop and mobile layouts.
+- [x] Re-run desktop and mobile verification in a confirmed authenticated sidebar state and record the result before release.
+- [x] Add deterministic authenticated-layout coverage confirming the sidebar trigger uses the solid opaque menu-control treatment.
+- [x] Save the validated sidebar menu-control fix as a new release checkpoint.
+- [x] Add an opaque background, border, and shadow to the opened mobile sliding sidebar panel.
+- [x] Verify the mobile sliding sidebar panel no longer reveals page content through its background.
+- [x] Save the validated sliding sidebar-panel correction as a new release checkpoint.
+- [x] Create and add a college-campus background asset for the CampusFix public landing page.
+- [x] Integrate the background with an accessible overlay and responsive hero styling.
+- [x] Verify landing-page readability and visual presentation on desktop and mobile.
+- [x] Add deterministic coverage confirming the campus background overlay and key landing-page actions remain present.
+- [x] Save the validated college-background update as a new release checkpoint.
+- [x] Add a staff-only multi-select working-fields profile field based on all CampusFix complaint categories.
+- [x] Persist and validate multiple selected staff working fields through a non-destructive database migration and protected profile API.
+- [x] Show staff working fields in the administrator approval review queue.
+- [x] Add automated coverage for multi-select working-field validation and administrator review data.
+- [x] Add client-side coverage proving staff can select multiple working fields while students do not see the control.
+- [x] Save the validated staff working-fields update as a new release checkpoint.
